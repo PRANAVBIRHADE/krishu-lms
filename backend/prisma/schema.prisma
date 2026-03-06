@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  password     String
+  role         Role           @default(STUDENT)
+  grade        Int?           // Optional, useful for students
+  createdAt    DateTime       @default(now())
+  
+  submissions  Submission[]
+  messages     ChatMessage[]
+  courses      Course[]
+  xp           Int            @default(0)
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  gradeLevel  Int
+  
+  lessons     Lesson[]
+  students    User[]
+}
+
+model Lesson {
+  id          String       @id @default(uuid())
+  courseId    String
+  title       String
+  content     String
+  meetLink    String?
+  videoUrl    String?
+  
+  course      Course       @relation(fields: [courseId], references: [id])
+  assignments Assignment[]
+}
+
+model Assignment {
+  id           String       @id @default(uuid())
+  lessonId     String
+  deadline     DateTime
+  instructions String
+  
+  lesson       Lesson       @relation(fields: [lessonId], references: [id])
+  submissions  Submission[]
+}
+
+model Submission {
+  id           String      @id @default(uuid())
+  studentId    String
+  assignmentId String
+  fileUrl      String
+  feedback     String?
+  grade        Int?
+  
+  student      User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignment   Assignment  @relation(fields: [assignmentId], references: [id])
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id             String   @id @default(uuid())
+  senderId       String
+  message        String
+  timestamp      DateTime @default(now())
+  isAnnouncement Boolean  @default(false)
+  
+  sender         User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}

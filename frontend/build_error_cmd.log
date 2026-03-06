@@ -1,0 +1,70 @@
+
+> frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./src/app/dashboard/admin/courses/page.tsx
+5:10  Error: 'BookOpen' is defined but never used.  @typescript-eslint/no-unused-vars
+5:59  Error: 'ArrowRight' is defined but never used.  @typescript-eslint/no-unused-vars
+9:44  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+120:50  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+140:73  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/admin/grading/page.tsx
+6:46  Error: 'Search' is defined but never used.  @typescript-eslint/no-unused-vars
+11:52  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/admin/page.tsx
+14:40  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+75:61  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/admin/users/page.tsx
+5:44  Error: 'AlertTriangle' is defined but never used.  @typescript-eslint/no-unused-vars
+13:40  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+98:44  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/announcements/page.tsx
+11:56  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/courses/page.tsx
+54:43  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/courses/[id]/page.tsx
+6:32  Error: 'CheckCircle' is defined but never used.  @typescript-eslint/no-unused-vars
+9:42  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+76:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+108:70  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/dashboard/page.tsx
+12:46  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+94:70  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+129:66  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+149:65  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/login/page.tsx
+29:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/page.tsx
+78:61  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+78:68  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+78:71  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+78:74  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+80:54  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+80:70  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+153:90  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+
+./src/app/register/page.tsx
+40:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/store/authStore.ts
+47:18  Error: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
