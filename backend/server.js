@@ -30,6 +30,11 @@ export const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
+// Root Route
+app.get('/', (req, res) => {
+    res.send('🚀 Happy Hackers LMS API is flying high!');
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
