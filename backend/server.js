@@ -12,7 +12,6 @@ import dashboardRoutes from './src/routes/dashboardRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
 import { chatHandler } from './src/sockets/chatHandler.js';
 import { startChatCleanupJob } from './src/jobs/chatCleanup.js';
-import { notFound, errorHandler } from './src/middlewares/errorMiddleware.js';
 
 dotenv.config();
 
