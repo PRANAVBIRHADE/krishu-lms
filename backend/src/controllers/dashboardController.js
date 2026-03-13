@@ -17,6 +17,9 @@ export const getDashboardData = async (req, res) => {
                             include: { lesson: true }
                         }
                     }
+                },
+                badges: {
+                    include: { badge: true }
                 }
             }
         });
@@ -82,13 +85,22 @@ export const getDashboardData = async (req, res) => {
             include: { sender: { select: { name: true, role: true } } }
         });
 
+        // Top Hackers Leaderboard
+        const leaderboard = await prisma.user.findMany({
+            where: { role: 'STUDENT' },
+            orderBy: [{ xp: 'desc' }, { level: 'desc' }],
+            take: 5,
+            select: { id: true, name: true, xp: true, level: true, avatarUrl: true }
+        });
+
         res.json({
             user: {
                 id: user.id,
                 name: user.name,
                 xp: user.xp,
-                // Calculate Level: Every 200 XP is a level, starting at 1
-                level: Math.floor(user.xp / 200) + 1,
+                level: user.level,
+                avatarUrl: user.avatarUrl,
+                badges: user.badges
             },
             courseProgress,
             nextClass: nextClassLesson ? {
@@ -97,7 +109,8 @@ export const getDashboardData = async (req, res) => {
                 meetLink: nextClassLesson.meetLink
             } : null,
             announcements,
-            recentChats: recentChats.reverse()
+            recentChats: recentChats.reverse(),
+            leaderboard
         });
 
     } catch (error) {

@@ -41,7 +41,11 @@ export const registerUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 xp: user.xp,
+                level: user.level,
+                avatarUrl: user.avatarUrl,
+                bio: user.bio,
                 courses: [],
+                badges: [],
                 token: generateToken(user.id),
             });
         } else {
@@ -70,6 +74,9 @@ export const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 xp: user.xp,
+                level: user.level,
+                avatarUrl: user.avatarUrl,
+                bio: user.bio,
                 // Optional: we can fetch their courses here or keep it simple
                 token: generateToken(user.id),
             });
@@ -90,7 +97,13 @@ export const getMe = async (req, res) => {
         // req.user is populated by protect middleware
         const user = await prisma.user.findUnique({
             where: { id: req.user.id },
-            select: { id: true, name: true, email: true, role: true, grade: true, xp: true, courses: true }
+            select: { 
+                id: true, name: true, email: true, role: true, grade: true, 
+                xp: true, level: true, avatarUrl: true, bio: true, courses: true,
+                badges: {
+                    include: { badge: true }
+                } 
+            }
         });
 
         if (!user) {
@@ -98,6 +111,32 @@ export const getMe = async (req, res) => {
         }
 
         res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Update user profile details
+// @route   PUT /api/auth/profile
+// @access  Private
+export const updateProfile = async (req, res) => {
+    try {
+        const { bio, avatarUrl } = req.body;
+        
+        const updatedUser = await prisma.user.update({
+            where: { id: req.user.id },
+            data: {
+                bio: bio !== undefined ? bio : undefined,
+                avatarUrl: avatarUrl !== undefined ? avatarUrl : undefined
+            },
+            select: { 
+                id: true, name: true, email: true, role: true, 
+                xp: true, level: true, avatarUrl: true, bio: true 
+            }
+        });
+
+        res.json(updatedUser);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });

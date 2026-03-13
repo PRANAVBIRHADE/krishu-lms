@@ -6,6 +6,11 @@ interface User {
     email: string;
     role: 'STUDENT' | 'ADMIN';
     grade?: number;
+    xp?: number;
+    level?: number;
+    bio?: string;
+    avatarUrl?: string;
+    badges?: any[];
 }
 
 interface AuthState {

@@ -1,6 +1,17 @@
 import { prisma } from '../../server.js';
 
+// Phase 6: Store active users: userId -> socketId
+const activeUsers = new Map();
+
 export const chatHandler = (io, socket) => {
+    
+    // Register User for Private Messaging
+    socket.on('register_user', (userId) => {
+        if (userId) {
+            activeUsers.set(userId, socket.id);
+        }
+    });
+
     // Join a specific course/global chat room
     socket.on('join_room', async (room) => {
         socket.join(room);
@@ -54,8 +65,47 @@ export const chatHandler = (io, socket) => {
         io.to(room).emit('message_deleted', messageId);
     });
 
-    // Handle disconnection is automatic, but we can hook into it
+    // Clean up on disconnect
     socket.on('disconnect', () => {
-        // console.log('User disconnected:', socket.id);
+        // Find and remove the user from activeUsers map
+        for (let [userId, mappedSocketId] of activeUsers.entries()) {
+            if (mappedSocketId === socket.id) {
+                activeUsers.delete(userId);
+                break;
+            }
+        }
+    });
+
+    // --- PHASE 6: Private Messaging ---
+    socket.on('private_message', async (data) => {
+        const { senderId, receiverId, message } = data;
+
+        try {
+            // Save to database
+            const savedMessage = await prisma.directMessage.create({
+                data: {
+                    senderId,
+                    receiverId,
+                    message,
+                },
+                include: {
+                    sender: { select: { id: true, name: true, avatarUrl: true, role: true } },
+                    receiver: { select: { id: true, name: true, avatarUrl: true, role: true } }
+                }
+            });
+
+            // Emit to receiver if online
+            const receiverSocketId = activeUsers.get(receiverId);
+            if (receiverSocketId) {
+                io.to(receiverSocketId).emit('receive_private_message', savedMessage);
+            }
+
+            // Emit back to sender so their UI updates instantly
+            socket.emit('receive_private_message', savedMessage);
+
+        } catch (error) {
+            console.error('Error saving private message:', error);
+            socket.emit('message_error', 'Failed to send message');
+        }
     });
 };

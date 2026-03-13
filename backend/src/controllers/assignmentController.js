@@ -1,4 +1,5 @@
 import { prisma } from '../../server.js';
+import { checkAndApplyGamification } from '../utils/gamification.js';
 
 // @desc    Create an assignment
 // @route   POST /api/assignments
@@ -90,6 +91,9 @@ export const submitAssignment = async (req, res) => {
             data: { xp: { increment: 50 } }
         });
 
+        // Check for level ups and badges
+        await checkAndApplyGamification(studentId);
+
         res.status(201).json(submission);
     } catch (error) {
         console.error(error);
@@ -117,6 +121,8 @@ export const gradeSubmission = async (req, res) => {
                 where: { id: submission.studentId },
                 data: { xp: { increment: parseInt(grade) * 10 } }
             });
+            // Re-calculate gamification
+            await checkAndApplyGamification(submission.studentId);
         }
 
         res.json(submission);

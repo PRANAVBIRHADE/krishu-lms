@@ -14,12 +14,23 @@ model User {
   password     String
   role         Role           @default(STUDENT)
   grade        Int?           // Optional, useful for students
+  
+  // Phase 6 Customization
+  avatarUrl    String?
+  bio          String?
+  level        Int            @default(1)
+  
   createdAt    DateTime       @default(now())
   
   submissions  Submission[]
   messages     ChatMessage[]
   courses      Course[]
   xp           Int            @default(0)
+  
+  // Relations for new Phase 6 Features
+  badges             UserBadge[]
+  sentDirectMsgs     DirectMessage[] @relation("SentMessages")
+  receivedDirectMsgs DirectMessage[] @relation("ReceivedMessages")
 }
 
 enum Role {
@@ -86,4 +97,38 @@ model ChatMessage {
   isAnnouncement Boolean  @default(false)
   
   sender         User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model DirectMessage {
+  id          String   @id @default(uuid())
+  senderId    String
+  receiverId  String
+  message     String
+  timestamp   DateTime @default(now())
+  read        Boolean  @default(false)
+  
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  icon        String   // Can be a string referring to an icon name like 'LucideBadge'
+  criteria    String   // Internal logic string, e.g., 'first_blood'
+  
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId]) // A user can only earn a specific badge once
 }

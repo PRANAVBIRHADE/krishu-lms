@@ -118,6 +118,40 @@ export default function DashboardHome() {
                 {/* Right Column (Sidebar widgets) */}
                 <div className="space-y-8">
 
+                    {/* Top Hackers Leaderboard */}
+                    <motion.div variants={itemVariants} className="glass-card p-6 rounded-3xl border border-yellow-500/20 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-bl-full blur-2xl pointer-events-none" />
+                        <div className="flex justify-between items-center mb-6 relative z-10">
+                            <h2 className="text-xl font-bold flex items-center gap-2"><Trophy size={20} className="text-yellow-500" /> Top Hackers</h2>
+                        </div>
+                        <div className="space-y-4 relative z-10">
+                            {loading ? (
+                                <div className="text-center text-gray-400 py-4"><Loader2 className="animate-spin mx-auto mb-2" /></div>
+                            ) : dashData?.leaderboard?.length > 0 ? (
+                                dashData.leaderboard.map((hacker: any, index: number) => (
+                                    <div key={hacker.id} className={`flex items-center justify-between p-3 rounded-xl border transition-all ${hacker.id === user?.id ? 'bg-primary/20 border-primary/50' : 'bg-darker border-white/5'}`}>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-yellow-500 text-black' : index === 1 ? 'bg-gray-300 text-black' : index === 2 ? 'bg-orange-600 text-white' : 'bg-white/10 text-gray-400'}`}>
+                                                #{index + 1}
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-sm flex items-center gap-2">
+                                                    {hacker.name} {hacker.id === user?.id && <span className="text-[10px] bg-primary/50 px-2 py-0.5 rounded text-white">YOU</span>}
+                                                </div>
+                                                <div className="text-xs text-gray-400">Lvl. {hacker.level} Hacker</div>
+                                            </div>
+                                        </div>
+                                        <div className="font-mono text-sm text-accent font-bold">
+                                            {hacker.xp} XP
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-gray-400 italic">Leaderboard is empty.</div>
+                            )}
+                        </div>
+                    </motion.div>
+
                     {/* Announcements */}
                     <motion.div variants={itemVariants} className="glass-card p-6 rounded-3xl bg-gradient-to-b from-white/5 to-transparent">
                         <div className="flex justify-between items-center mb-6">

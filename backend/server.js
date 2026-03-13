@@ -7,10 +7,12 @@ import { PrismaClient } from '@prisma/client';
 import authRoutes from './src/routes/authRoutes.js';
 import courseRoutes from './src/routes/courseRoutes.js';
 import assignmentRoutes from './src/routes/assignmentRoutes.js';
+import messageRoutes from './src/routes/messageRoutes.js';
 import dashboardRoutes from './src/routes/dashboardRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
 import { chatHandler } from './src/sockets/chatHandler.js';
 import { startChatCleanupJob } from './src/jobs/chatCleanup.js';
+import { notFound, errorHandler } from './src/middlewares/errorMiddleware.js';
 
 dotenv.config();
 
@@ -39,6 +41,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/assignments', assignmentRoutes);
+app.use('/api/messages', messageRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/admin', adminRoutes);
 

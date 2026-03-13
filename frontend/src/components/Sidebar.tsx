@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthStore } from '@/store/authStore';
-import { BookOpen, Home, Bell, MessageSquare, LogOut, Settings, Users } from 'lucide-react';
+import { BookOpen, Home, Bell, MessageSquare, LogOut, Settings, Users, User, Send, Code } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
@@ -20,6 +20,9 @@ export default function Sidebar() {
         { name: 'Dashboard', icon: Home, path: '/dashboard' },
         { name: 'Courses', icon: BookOpen, path: '/dashboard/courses' },
         { name: 'Chat Room', icon: MessageSquare, path: '/dashboard/chat' },
+        { name: 'Code Sandbox', icon: Code, path: '/dashboard/sandbox' },
+        { name: 'Profile', icon: User, path: '/dashboard/profile' },
+        { name: 'Direct Messages', icon: Send, path: '/dashboard/messages' },
         { name: 'Announcements', icon: Bell, path: '/dashboard/announcements' },
     ];
 
